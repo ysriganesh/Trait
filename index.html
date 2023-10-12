@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        th, td {
+            border: 1px solid white;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: lightgray;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+        .button.edit {
+            background-color: #FFA500;
+        }
+        .button.delete {
+            background-color: #FF4500;
+        }
+    </style>
+</head>
+<body>
+    <h1>My To-Do List</h1>
+    <p>"You are never too old to set another goal or to dream a new dream." - C.S. Lewis</p>
+
+    <label for="taskInput">Task:</label>
+    <input type="text" id="taskInput">
+    <label for="dateInput">Date:</label>
+    <input type="date" id="dateInput">
+    <button class="button" onclick="addTask()">Add Task</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Date</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="taskList">
+            <!-- Tasks will be added here -->
+        </tbody>
+    </table>
+
+    <script>
+        function addTask() {
+            var taskInput = document.getElementById("taskInput").value;
+            var dateInput = document.getElementById("dateInput").value;
+
+            if (taskInput.trim() === "" || dateInput.trim() === "") {
+                alert("Please enter a task and date.");
+                return;
+            }
+
+            var taskList = document.getElementById("taskList");
+            var newRow = taskList.insertRow(taskList.rows.length);
+
+            for (var i = 0; i < 5; i++) {
+                var cell = newRow.insertCell(i);
+                if (i === 0) {
+                    cell.textContent = taskInput;
+                } else if (i === 1) {
+                    cell.textContent = dateInput;
+                } else if (i === 2) {
+                    var editButton = document.createElement("button");
+                    editButton.innerHTML = "Edit";
+                    editButton.className = "button edit";
+                    editButton.onclick = function() {
+                        editTask(newRow);
+                    };
+                    cell.appendChild(editButton);
+                } else if (i === 3) {
+                    var deleteButton = document.createElement("button");
+                    deleteButton.innerHTML = "Delete";
+                    deleteButton.className = "button delete";
+                    deleteButton.onclick = function() {
+                        deleteTask(newRow);
+                    };
+                    cell.appendChild(deleteButton);
+                }
+            }
+
+            document.getElementById("taskInput").value = "";
+            document.getElementById("dateInput").value = "";
+        }
+
+        function editTask(row) {
+            var cells = row.getElementsByTagName("td");
+            var taskInput = prompt("Edit the task:", cells[0].textContent);
+            if (taskInput !== null) {
+                cells[0].textContent = taskInput;
+            }
+        }
+
+        function deleteTask(row) {
+            var confirmDelete = confirm("Are you sure you want to delete this task?");
+            if (confirmDelete) {
+                row.remove();
+            }
+        }
+    </script>
+</body>
+</html>
